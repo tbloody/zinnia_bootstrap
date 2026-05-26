@@ -96,6 +96,7 @@ KVM ?= 1
 QEMUFLAGS ?=
 
 override QEMUFLAGS += \
+	-display gtk,zoom-to-fit=off \
 	-serial stdio \
 	-m $(MEM) \
 	-smp $(SMP) \
