@@ -1,8 +1,9 @@
 diff --git rust-clean/Cargo.lock rust-workdir/Cargo.lock
-index 2cc2e09..25be301 100644
+index 9ff977e..2cb3d1d 100644
 --- rust-clean/Cargo.lock
 +++ rust-workdir/Cargo.lock
-@@ -2164,8 +2164,6 @@ checksum = "9fa0e2a1fcbe2f6be6c42e342259976206b383122fc152e872795338b5a3f3a7"
+@@ -2146,9 +2146,7 @@ checksum = "9fa0e2a1fcbe2f6be6c42e342259976206b383122fc152e872795338b5a3f3a7"
+ 
  [[package]]
  name = "libc"
 -version = "0.2.177"
@@ -24,9 +25,21 @@ index 67c7a9d..56ce708 100644
 -
 +[patch.crates-io]
 +libc = { path = "/base_dir/sources/rust-libc" }
+diff --git rust-clean/compiler/rustc_target/src/spec/base/mod.rs rust-workdir/compiler/rustc_target/src/spec/base/mod.rs
+index 9e7ff62..7faabc6 100644
+--- rust-clean/compiler/rustc_target/src/spec/base/mod.rs
++++ rust-workdir/compiler/rustc_target/src/spec/base/mod.rs
+@@ -23,6 +23,7 @@ pub(crate) mod linux_uclibc;
+ pub(crate) mod linux_wasm;
+ pub(crate) mod lynxos178;
+ pub(crate) mod managarm_mlibc;
++pub(crate) mod zinnia_mlibc;
+ pub(crate) mod motor;
+ pub(crate) mod msvc;
+ pub(crate) mod netbsd;
 diff --git rust-workdir/compiler/rustc_target/src/spec/base/zinnia_mlibc.rs rust-workdir/compiler/rustc_target/src/spec/base/zinnia_mlibc.rs
 new file mode 100644
-index 0000000..5e644df
+index 0000000..c258ec1
 --- /dev/null
 +++ rust-workdir/compiler/rustc_target/src/spec/base/zinnia_mlibc.rs
 @@ -0,0 +1,17 @@
@@ -47,23 +60,11 @@ index 0000000..5e644df
 +        ..Default::default()
 +    }
 +}
-diff --git rust-clean/compiler/rustc_target/src/spec/base/mod.rs rust-workdir/compiler/rustc_target/src/spec/base/mod.rs
-index 9e7ff62..d429bc5 100644
---- rust-clean/compiler/rustc_target/src/spec/base/mod.rs
-+++ rust-workdir/compiler/rustc_target/src/spec/base/mod.rs
-@@ -23,6 +23,7 @@ pub(crate) mod linux_uclibc;
- pub(crate) mod linux_wasm;
- pub(crate) mod lynxos178;
- pub(crate) mod managarm_mlibc;
-+pub(crate) mod zinnia_mlibc;
- pub(crate) mod motor;
- pub(crate) mod msvc;
- pub(crate) mod netbsd;
 diff --git rust-clean/compiler/rustc_target/src/spec/mod.rs rust-workdir/compiler/rustc_target/src/spec/mod.rs
-index 424026b..365828d 100644
+index d9c872c..1f1e4cf 100644
 --- rust-clean/compiler/rustc_target/src/spec/mod.rs
 +++ rust-workdir/compiler/rustc_target/src/spec/mod.rs
-@@ -1570,6 +1570,10 @@ supported_targets! {
+@@ -1571,6 +1571,10 @@ supported_targets! {
      ("aarch64-unknown-managarm-mlibc", aarch64_unknown_managarm_mlibc),
      ("riscv64gc-unknown-managarm-mlibc", riscv64gc_unknown_managarm_mlibc),
  
@@ -74,7 +75,7 @@ index 424026b..365828d 100644
      ("i386-apple-ios", i386_apple_ios),
      ("x86_64-apple-ios", x86_64_apple_ios),
      ("aarch64-apple-ios", aarch64_apple_ios),
-@@ -1969,6 +1973,7 @@ crate::target_spec_enum! {
+@@ -1982,6 +1986,7 @@ crate::target_spec_enum! {
          LynxOs178 = "lynxos178",
          MacOs = "macos",
          Managarm = "managarm",
@@ -84,7 +85,7 @@ index 424026b..365828d 100644
          None = "none",
 diff --git rust-workdir/compiler/rustc_target/src/spec/targets/aarch64_unknown_zinnia_mlibc.rs rust-workdir/compiler/rustc_target/src/spec/targets/aarch64_unknown_zinnia_mlibc.rs
 new file mode 100644
-index 0000000..3b98d39
+index 0000000..7ce135a
 --- /dev/null
 +++ rust-workdir/compiler/rustc_target/src/spec/targets/aarch64_unknown_zinnia_mlibc.rs
 @@ -0,0 +1,22 @@
@@ -112,7 +113,7 @@ index 0000000..3b98d39
 +}
 diff --git rust-workdir/compiler/rustc_target/src/spec/targets/riscv64gc_unknown_zinnia_mlibc.rs rust-workdir/compiler/rustc_target/src/spec/targets/riscv64gc_unknown_zinnia_mlibc.rs
 new file mode 100644
-index 0000000..49ffb6b
+index 0000000..3c4ae22
 --- /dev/null
 +++ rust-workdir/compiler/rustc_target/src/spec/targets/riscv64gc_unknown_zinnia_mlibc.rs
 @@ -0,0 +1,24 @@
@@ -142,7 +143,7 @@ index 0000000..49ffb6b
 +}
 diff --git rust-workdir/compiler/rustc_target/src/spec/targets/x86_64_unknown_zinnia_mlibc.rs rust-workdir/compiler/rustc_target/src/spec/targets/x86_64_unknown_zinnia_mlibc.rs
 new file mode 100644
-index 0000000..f9ee28c
+index 0000000..33e9d26
 --- /dev/null
 +++ rust-workdir/compiler/rustc_target/src/spec/targets/x86_64_unknown_zinnia_mlibc.rs
 @@ -0,0 +1,24 @@
@@ -171,7 +172,7 @@ index 0000000..f9ee28c
 +    }
 +}
 diff --git rust-clean/library/Cargo.lock rust-workdir/library/Cargo.lock
-index accbbe9..a13596c 100644
+index 4801f92..8e527a2 100644
 --- rust-clean/library/Cargo.lock
 +++ rust-workdir/library/Cargo.lock
 @@ -147,8 +147,6 @@ dependencies = [
@@ -184,10 +185,10 @@ index accbbe9..a13596c 100644
   "rustc-std-workspace-core",
  ]
 diff --git rust-clean/library/Cargo.toml rust-workdir/library/Cargo.toml
-index e30e624..78d4077 100644
+index 87df966..020e1e2 100644
 --- rust-clean/library/Cargo.toml
 +++ rust-workdir/library/Cargo.toml
-@@ -56,6 +56,7 @@ rustflags = ["-Cpanic=abort"]
+@@ -82,6 +82,7 @@ rustflags = [
  
  [patch.crates-io]
  # See comments in `library/rustc-std-workspace-core/README.md` for what's going on here
@@ -195,16 +196,54 @@ index e30e624..78d4077 100644
  rustc-std-workspace-core = { path = 'rustc-std-workspace-core' }
  rustc-std-workspace-alloc = { path = 'rustc-std-workspace-alloc' }
  rustc-std-workspace-std = { path = 'rustc-std-workspace-std' }
+diff --git rust-clean/library/std/build.rs rust-workdir/library/std/build.rs
+index c0a6e30..1e07e73 100644
+--- rust-clean/library/std/build.rs
++++ rust-workdir/library/std/build.rs
+@@ -57,6 +57,7 @@ fn main() {
+         || target_os == "nuttx"
+         || target_os == "cygwin"
+         || target_os == "vexos"
++        || target_os == "zinnia"
+ 
+         // See src/bootstrap/src/core/build_steps/synthetic_targets.rs
+         || env::var("RUSTC_BOOTSTRAP_SYNTHETIC_TARGET").is_ok()
+diff --git rust-clean/library/std/src/os/mod.rs rust-workdir/library/std/src/os/mod.rs
+index 7637440..5b5a4b3 100644
+--- rust-clean/library/std/src/os/mod.rs
++++ rust-workdir/library/std/src/os/mod.rs
+@@ -155,6 +155,8 @@ pub mod ios;
+ pub mod l4re;
+ #[cfg(target_os = "macos")]
+ pub mod macos;
++#[cfg(target_os = "zinnia")]
++pub mod zinnia;
+ #[cfg(target_os = "motor")]
+ pub mod motor;
+ #[cfg(target_os = "netbsd")]
+diff --git rust-clean/library/std/src/os/unix/mod.rs rust-workdir/library/std/src/os/unix/mod.rs
+index 78c9572..6c11992 100644
+--- rust-clean/library/std/src/os/unix/mod.rs
++++ rust-workdir/library/std/src/os/unix/mod.rs
+@@ -67,6 +67,8 @@ mod platform {
+     pub use crate::os::l4re::*;
+     #[cfg(target_os = "linux")]
+     pub use crate::os::linux::*;
++    #[cfg(target_os = "zinnia")]
++    pub use crate::os::zinnia::*;
+     #[cfg(target_os = "netbsd")]
+     pub use crate::os::netbsd::*;
+     #[cfg(target_os = "nto")]
 diff --git rust-workdir/library/std/src/os/zinnia/fs.rs rust-workdir/library/std/src/os/zinnia/fs.rs
 new file mode 100644
-index 0000000..b48a46f
+index 0000000..8cded1d
 --- /dev/null
 +++ rust-workdir/library/std/src/os/zinnia/fs.rs
 @@ -0,0 +1,95 @@
 +#![stable(feature = "metadata_ext", since = "1.1.0")]
 +
 +use crate::fs::Metadata;
-+use crate::sys_common::AsInner;
++use crate::sys::AsInner;
 +
 +/// OS-specific extensions to [`fs::Metadata`].
 +///
@@ -386,34 +425,8 @@ index 0000000..a811c42
 +    #[stable(feature = "raw_ext", since = "1.1.0")]
 +    pub st_blocks: blkcnt_t,
 +}
-diff --git rust-clean/library/std/src/os/mod.rs rust-workdir/library/std/src/os/mod.rs
-index 7637440..6830885 100644
---- rust-clean/library/std/src/os/mod.rs
-+++ rust-workdir/library/std/src/os/mod.rs
-@@ -155,6 +155,8 @@ pub mod ios;
- pub mod l4re;
- #[cfg(target_os = "macos")]
- pub mod macos;
-+#[cfg(target_os = "zinnia")]
-+pub mod zinnia;
- #[cfg(target_os = "motor")]
- pub mod motor;
- #[cfg(target_os = "netbsd")]
-diff --git rust-clean/library/std/src/os/unix/mod.rs rust-workdir/library/std/src/os/unix/mod.rs
-index 78c9572..7f2f34d 100644
---- rust-clean/library/std/src/os/unix/mod.rs
-+++ rust-workdir/library/std/src/os/unix/mod.rs
-@@ -67,6 +67,8 @@ mod platform {
-     pub use crate::os::l4re::*;
-     #[cfg(target_os = "linux")]
-     pub use crate::os::linux::*;
-+    #[cfg(target_os = "zinnia")]
-+    pub use crate::os::zinnia::*;
-     #[cfg(target_os = "netbsd")]
-     pub use crate::os::netbsd::*;
-     #[cfg(target_os = "nto")]
 diff --git rust-clean/library/std/src/sys/args/unix.rs rust-workdir/library/std/src/sys/args/unix.rs
-index 0dfbd5f..9824e5f 100644
+index 7a592c2..5196b88 100644
 --- rust-clean/library/std/src/sys/args/unix.rs
 +++ rust-workdir/library/std/src/sys/args/unix.rs
 @@ -84,6 +84,7 @@ pub fn args() -> Args {
@@ -425,7 +438,7 @@ index 0dfbd5f..9824e5f 100644
  mod imp {
      use crate::ffi::c_char;
 diff --git rust-clean/library/std/src/sys/env_consts.rs rust-workdir/library/std/src/sys/env_consts.rs
-index 573f540..cea4916 100644
+index 573f540..fc6b192 100644
 --- rust-clean/library/std/src/sys/env_consts.rs
 +++ rust-workdir/library/std/src/sys/env_consts.rs
 @@ -147,6 +147,17 @@ pub mod os {
@@ -447,10 +460,10 @@ index 573f540..cea4916 100644
  pub mod os {
      pub const FAMILY: &str = "unix";
 diff --git rust-clean/library/std/src/sys/fd/unix.rs rust-workdir/library/std/src/sys/fd/unix.rs
-index 2b2dfe4..33387d2 100644
+index bb6c0ac..ef02271 100644
 --- rust-clean/library/std/src/sys/fd/unix.rs
 +++ rust-workdir/library/std/src/sys/fd/unix.rs
-@@ -67,6 +67,7 @@ const READ_LIMIT: usize = if cfg!(target_vendor = "apple") {
+@@ -66,6 +66,7 @@ const READ_LIMIT: usize = if cfg!(target_vendor = "apple") {
      target_os = "openbsd",
      target_vendor = "apple",
      target_os = "cygwin",
@@ -458,7 +471,7 @@ index 2b2dfe4..33387d2 100644
  ))]
  const fn max_iov() -> usize {
      libc::IOV_MAX as usize
-@@ -97,6 +98,7 @@ const fn max_iov() -> usize {
+@@ -96,6 +97,7 @@ const fn max_iov() -> usize {
      target_os = "vita",
      target_vendor = "apple",
      target_os = "cygwin",
@@ -482,7 +495,7 @@ index 2b2dfe4..33387d2 100644
      )))]
      pub fn read_vectored_at(&self, bufs: &mut [IoSliceMut<'_>], offset: u64) -> io::Result<usize> {
          io::default_read_vectored(|b| self.read_at(b, offset), bufs)
-@@ -425,6 +429,7 @@ impl FileDesc {
+@@ -426,6 +430,7 @@ impl FileDesc {
          target_os = "linux",
          target_os = "netbsd",
          target_os = "openbsd", // OpenBSD 2.7
@@ -490,7 +503,7 @@ index 2b2dfe4..33387d2 100644
      ))]
      pub fn write_vectored_at(&self, bufs: &[IoSlice<'_>], offset: u64) -> io::Result<usize> {
          let ret = cvt(unsafe {
-@@ -451,6 +456,7 @@ impl FileDesc {
+@@ -452,6 +457,7 @@ impl FileDesc {
          target_os = "netbsd",
          target_os = "openbsd",
          target_vendor = "apple",
@@ -498,8 +511,32 @@ index 2b2dfe4..33387d2 100644
      )))]
      pub fn write_vectored_at(&self, bufs: &[IoSlice<'_>], offset: u64) -> io::Result<usize> {
          io::default_write_vectored(|b| self.write_at(b, offset), bufs)
+diff --git rust-clean/library/std/src/sys/fs/unix.rs rust-workdir/library/std/src/sys/fs/unix.rs
+index 7db4745..caa63dc 100644
+--- rust-clean/library/std/src/sys/fs/unix.rs
++++ rust-workdir/library/std/src/sys/fs/unix.rs
+@@ -1142,6 +1142,7 @@ impl DirEntry {
+         target_os = "vita",
+         target_os = "vxworks",
+         target_os = "wasi",
++        target_os = "zinnia",
+         target_vendor = "apple",
+     ))]
+     pub fn ino(&self) -> u64 {
+diff --git rust-clean/library/std/src/sys/io/error/unix.rs rust-workdir/library/std/src/sys/io/error/unix.rs
+index b10343b..3973f19 100644
+--- rust-clean/library/std/src/sys/io/error/unix.rs
++++ rust-workdir/library/std/src/sys/io/error/unix.rs
+@@ -10,6 +10,7 @@ unsafe extern "C" {
+             target_os = "fuchsia",
+             target_os = "l4re",
+             target_os = "hurd",
++            target_os = "zinnia",
+         ),
+         link_name = "__errno_location"
+     )]
 diff --git rust-clean/library/std/src/sys/net/connection/socket/unix.rs rust-workdir/library/std/src/sys/net/connection/socket/unix.rs
-index 559e276..8ee8a79 100644
+index 5e20c0f..71efedf 100644
 --- rust-clean/library/std/src/sys/net/connection/socket/unix.rs
 +++ rust-workdir/library/std/src/sys/net/connection/socket/unix.rs
 @@ -77,6 +77,7 @@ impl Socket {
@@ -527,11 +564,11 @@ index 559e276..8ee8a79 100644
                  unsafe {
                      let fd = cvt_r(|| libc::accept4(self.as_raw_fd(), storage, len, libc::SOCK_CLOEXEC))?;
 diff --git rust-clean/library/std/src/sys/pal/unix/os.rs rust-workdir/library/std/src/sys/pal/unix/os.rs
-index 7c9f3b7..ce625c9 100644
+index 494d944..e25d582 100644
 --- rust-clean/library/std/src/sys/pal/unix/os.rs
 +++ rust-workdir/library/std/src/sys/pal/unix/os.rs
-@@ -489,6 +489,12 @@ pub fn current_exe() -> io::Result<PathBuf> {
-     Err(io::const_error!(ErrorKind::Unsupported, "not yet implemented!"))
+@@ -360,6 +360,12 @@ pub fn current_exe() -> io::Result<PathBuf> {
+     Err(io::const_error!(io::ErrorKind::Unsupported, "not yet implemented!"))
  }
  
 +#[cfg(target_os = "zinnia")]
@@ -544,7 +581,7 @@ index 7c9f3b7..ce625c9 100644
  pub fn current_exe() -> io::Result<PathBuf> {
      #[cfg(test)]
 diff --git rust-clean/library/std/src/sys/random/mod.rs rust-workdir/library/std/src/sys/random/mod.rs
-index 91f72d0..dfd3716 100644
+index 91f72d0..2ee1110 100644
 --- rust-clean/library/std/src/sys/random/mod.rs
 +++ rust-workdir/library/std/src/sys/random/mod.rs
 @@ -62,6 +62,10 @@ cfg_select! {
@@ -559,10 +596,10 @@ index 91f72d0..dfd3716 100644
          mod motor;
          pub use motor::fill_bytes;
 diff --git rust-clean/library/std/src/sys/thread/unix.rs rust-workdir/library/std/src/sys/thread/unix.rs
-index 4adc94d..b50c713 100644
+index 22f9bfe..9f5330d 100644
 --- rust-clean/library/std/src/sys/thread/unix.rs
 +++ rust-workdir/library/std/src/sys/thread/unix.rs
-@@ -154,6 +154,7 @@ pub fn available_parallelism() -> io::Result<NonZero<usize>> {
+@@ -155,6 +155,7 @@ pub fn available_parallelism() -> io::Result<NonZero<usize>> {
              target_os = "aix",
              target_vendor = "apple",
              target_os = "cygwin",
@@ -570,7 +607,7 @@ index 4adc94d..b50c713 100644
          ) => {
              #[allow(unused_assignments)]
              #[allow(unused_mut)]
-@@ -419,7 +420,8 @@ pub fn set_name(name: &CStr) {
+@@ -420,7 +421,8 @@ pub fn set_name(name: &CStr) {
      target_os = "freebsd",
      target_os = "dragonfly",
      target_os = "nuttx",
@@ -580,3 +617,19 @@ index 4adc94d..b50c713 100644
  ))]
  pub fn set_name(name: &CStr) {
      unsafe {
+diff --git rust-clean/library/unwind/src/lib.rs rust-workdir/library/unwind/src/lib.rs
+index cce6ca7..da5eda0 100644
+--- rust-clean/library/unwind/src/lib.rs
++++ rust-workdir/library/unwind/src/lib.rs
+@@ -163,6 +163,11 @@ unsafe extern "C" {}
+ #[link(name = "gcc_s")]
+ unsafe extern "C" {}
+ 
++#[cfg(target_os = "zinnia")]
++#[link(name = "gcc_eh", kind = "static", modifiers = "-bundle", cfg(target_feature = "crt-static"))]
++#[link(name = "gcc_s", cfg(not(target_feature = "crt-static")))]
++unsafe extern "C" {}
++
+ #[cfg(target_os = "freebsd")]
+ #[link(name = "gcc", kind = "static", modifiers = "-bundle", cfg(target_feature = "crt-static"))]
+ #[link(name = "gcc_eh", kind = "static", modifiers = "-bundle", cfg(target_feature = "crt-static"))]

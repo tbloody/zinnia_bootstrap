@@ -2,11 +2,12 @@
 
 name=rust
 from_source=rust
-revision=1
+revision=2
 imagedeps="build-essential cmake ninja-build python3 curl git"
 hostdeps="pkg-config"
 hostrundeps="gcc llvm"
 deps="core-libs rust-libc"
+builddeps="mlibc"
 allow_network=yes
 
 configure() {
@@ -20,10 +21,7 @@ link-shared = true
 download-ci-llvm = false
 
 [build]
-# TODO: We don't actually cross compile anything yet that targets Zinnia and don't have libc yet.
-#       But it's enough to build a host-cargo
-# target = ["${RUST_TRIPLET}", "${RUST_HOST_TRIPLET}"]
-target = ["${RUST_HOST_TRIPLET}"]
+target = ["${RUST_TRIPLET}", "${RUST_HOST_TRIPLET}"]
 docs = false
 python = "python3"
 tools = ["src"]
