@@ -30,8 +30,8 @@ $ make
 ```
 
 in the root of the repository.
-This will build a small subset of the distribution and create a bootable ISO
-named `zinnia.iso` in the build directory.
+This will build a small subset of the distribution and create a bootable image
+named `zinnia.img` in the build directory.
 
 You can also build separate packages by running `../jinx/jinx build <package>`
 inside the respective build directory for the target architecture.
