@@ -2,7 +2,7 @@
 
 name=zinnia
 from_source=zinnia
-revision=1
+revision=2
 imagedeps="build-essential"
 allow_network=yes
 hostdeps="llvm cargo rust"
