@@ -2,7 +2,7 @@
 
 name=libudev
 version=2026.05
-revision=1
+revision=2
 git_url="https://github.com/wulf7/libudev-devd.git"
 commit="0f2c177600a5d2d89ecbc6fa4c1272e42ab224fb"
 hostdeps="gcc pkg-config"

@@ -1,0 +1,89 @@
+diff --git libudev-workdir/sys/cdefs.h libudev-workdir/sys/cdefs.h
+new file mode 100644
+index 0000000..e019d2a
+--- /dev/null
++++ libudev-workdir/sys/cdefs.h
+@@ -0,0 +1,57 @@
++#ifndef _SYS_CDEFS_H_
++#define _SYS_CDEFS_H_
++
++#ifdef __cplusplus
++#define __BEGIN_DECLS extern "C" {
++#define __END_DECLS }
++#else
++#define __BEGIN_DECLS
++#define __END_DECLS
++#endif
++
++#ifndef __inline
++#define __inline inline
++#endif
++
++#ifndef __always_inline
++#define __always_inline __inline __attribute__((__always_inline__))
++#endif
++
++#ifndef __unused
++#define __unused __attribute__((__unused__))
++#endif
++
++#ifndef __used
++#define __used __attribute__((__used__))
++#endif
++
++#ifndef __packed
++#define __packed __attribute__((__packed__))
++#endif
++
++#ifndef __aligned
++#define __aligned(x) __attribute__((__aligned__(x)))
++#endif
++
++#ifndef __dead2
++#define __dead2 __attribute__((__noreturn__))
++#endif
++
++#ifndef __pure2
++#define __pure2 __attribute__((__const__))
++#endif
++
++#ifndef __printflike
++#define __printflike(fmtarg, firstvararg) \
++	__attribute__((__format__(__printf__, fmtarg, firstvararg)))
++#endif
++
++#ifndef __nonnull
++#define __nonnull(x) __attribute__((__nonnull__(x)))
++#endif
++
++#ifndef __restrict
++#define __restrict restrict
++#endif
++
++#endif /* _SYS_CDEFS_H_ */
+diff --git libudev-clean/udev-device.c libudev-workdir/udev-device.c
+index da81d1e..e880870 100644
+--- libudev-clean/udev-device.c
++++ libudev-workdir/udev-device.c
+@@ -25,7 +25,7 @@
+ 
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#ifdef __linux__
++#if defined(__linux__) || defined(__zinnia__)
+ #include <sys/sysmacros.h>
+ #endif
+ 
+diff --git libudev-clean/udev-utils.c libudev-workdir/udev-utils.c
+index de6f480..42cefd7 100644
+--- libudev-clean/udev-utils.c
++++ libudev-workdir/udev-utils.c
+@@ -119,7 +119,7 @@ static const struct subsystem_config subsystems[] = {
+ 		.create_handler = create_mouse_handler,
+ 	}, {
+ 		.subsystem = "drm",
+-		.syspath = DEV_PATH_ROOT "/dri/card[0-9]*",
++		.syspath = DEV_PATH_ROOT "/drm/card[0-9]*",
+ 		.symlink = DEV_PATH_ROOT "/drm/[0-9]*",
+ 		.create_handler = create_drm_handler,
+ 	}, {
