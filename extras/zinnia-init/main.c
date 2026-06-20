@@ -13,6 +13,66 @@
 #include <time.h>
 #include <unistd.h>
 
+#define MODULES_DIR "/usr/share/zinnia/modules"
+
+static int is_blacklisted(const char *name, const char *cmdline) {
+  const char *prefix = "rd.blacklist=";
+  size_t prefix_len = strlen(prefix);
+  size_t name_len = strlen(name);
+
+  const char *p = cmdline;
+  while (*p) {
+    if (strncmp(p, prefix, prefix_len) == 0) {
+      const char *val = p + prefix_len;
+      if (strncmp(val, name, name_len) == 0 &&
+          (val[name_len] == '\0' || val[name_len] == ' '))
+        return 1;
+    }
+    while (*p && *p != ' ')
+      p++;
+    while (*p == ' ')
+      p++;
+  }
+  return 0;
+}
+
+static void load_modules(const char *cmdline) {
+  DIR *dir = opendir(MODULES_DIR);
+  if (!dir) {
+    perror("init: opendir modules");
+    return;
+  }
+
+  struct dirent *ent;
+  while ((ent = readdir(dir)) != NULL) {
+    size_t len = strlen(ent->d_name);
+    if (len < 5 || strcmp(ent->d_name + len - 4, ".kso") != 0)
+      continue;
+
+    size_t base_len = len - 4;
+    char *name = malloc(base_len + 1);
+    if (!name)
+      continue;
+    memcpy(name, ent->d_name, base_len);
+    name[base_len] = '\0';
+
+    if (is_blacklisted(name, cmdline)) {
+      printf("init: Skipping blacklisted module %s\n", name);
+      free(name);
+      continue;
+    }
+
+    char path[512];
+    snprintf(path, sizeof(path), "%s/%s", MODULES_DIR, ent->d_name);
+    printf("init: Loading module %s\n", name);
+    if (insertmod(path, NULL) != 0)
+      fprintf(stderr, "init: failed to load %s: %s\n", path, strerror(errno));
+    free(name);
+  }
+
+  closedir(dir);
+}
+
 static int wait_for_path(const char *path, int timeout_ms) {
   const int interval_ms = 50;
   int waited = 0;
@@ -42,10 +102,7 @@ int main(int argc, char **argv, char **envp) {
 
   printf("init: Command line: %s\n", line_buf);
 
-  insertmod("/usr/share/zinnia/modules/nvme.kso", NULL);
-  insertmod("/usr/share/zinnia/modules/ext2.kso", NULL);
-  insertmod("/usr/share/zinnia/modules/virtio_gpu.kso", NULL);
-  insertmod("/usr/share/zinnia/modules/virtio_net.kso", NULL);
+  load_modules(line_buf);
 
   printf("init: Mounting ext2 root partition on /realfs\n");
 
