@@ -2,7 +2,7 @@
 
 name=lightdm
 version=1.32.0
-revision=11
+revision=12
 tarball_url="https://github.com/canonical/lightdm/releases/download/${version}/lightdm-${version}.tar.xz"
 tarball_blake2b="90191559895a58e2c5892705ea95766aaaaa87d3470f1372ab90fcf3991d27f9280d5bbabe0cfce70e25f960d63c1e7eab7beeeb501341996afd155788cbe1c7"
 imagedeps="intltool itstool"

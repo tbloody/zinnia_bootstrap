@@ -1,7 +1,8 @@
-diff -urN --no-dereference lightdm-clean/liblightdm-gobject/session.c lightdm-workdir/liblightdm-gobject/session.c
---- lightdm-clean/liblightdm-gobject/session.c	2021-02-15 23:11:06.000000000 +0100
-+++ lightdm-workdir/liblightdm-gobject/session.c	2026-06-06 00:20:40.610916968 +0200
-@@ -190,14 +190,14 @@
+diff --git lightdm-clean/liblightdm-gobject/session.c lightdm-workdir/liblightdm-gobject/session.c
+index 79dcf46..659dba9 100644
+--- lightdm-clean/liblightdm-gobject/session.c
++++ lightdm-workdir/liblightdm-gobject/session.c
+@@ -190,14 +190,14 @@ update_sessions (void)
      config_load_from_standard_locations (config_get_instance (), NULL, NULL);
  
      gchar *value = config_get_string (config_get_instance (), "LightDM", "sessions-directory");
@@ -18,10 +19,11 @@ diff -urN --no-dereference lightdm-clean/liblightdm-gobject/session.c lightdm-wo
      {
          g_free (remote_sessions_dir);
          remote_sessions_dir = value;
-diff -urN --no-dereference lightdm-clean/src/seat.c lightdm-workdir/src/seat.c
---- lightdm-clean/src/seat.c	2020-07-14 01:35:34.000000000 +0200
-+++ lightdm-workdir/src/seat.c	2026-06-06 00:20:40.609652480 +0200
-@@ -705,7 +705,7 @@
+diff --git lightdm-clean/src/seat.c lightdm-workdir/src/seat.c
+index b185033..70812ed 100644
+--- lightdm-clean/src/seat.c
++++ lightdm-workdir/src/seat.c
+@@ -705,7 +705,7 @@ find_user_session (Seat *seat, const gchar *username, Session *ignore_session)
          if (session == ignore_session)
              continue;
  
@@ -30,9 +32,10 @@ diff -urN --no-dereference lightdm-clean/src/seat.c lightdm-workdir/src/seat.c
              return session;
      }
  
-diff -urN --no-dereference lightdm-clean/src/session-child.c lightdm-workdir/src/session-child.c
---- lightdm-clean/src/session-child.c	2021-04-12 06:52:50.000000000 +0200
-+++ lightdm-workdir/src/session-child.c	2026-06-06 00:20:40.607412752 +0200
+diff --git lightdm-clean/src/session-child.c lightdm-workdir/src/session-child.c
+index 112daab..95ad523 100644
+--- lightdm-clean/src/session-child.c
++++ lightdm-workdir/src/session-child.c
 @@ -16,6 +16,7 @@
  #include <utmp.h>
  #include <utmpx.h>
@@ -41,7 +44,7 @@ diff -urN --no-dereference lightdm-clean/src/session-child.c lightdm-workdir/src
  
  #if HAVE_LIBAUDIT
  #include <libaudit.h>
-@@ -194,26 +195,6 @@
+@@ -194,26 +195,6 @@ read_xauth (void)
  }
  
  /* GNU provides this but we can't rely on that so let's make our own version */
@@ -68,9 +71,10 @@ diff -urN --no-dereference lightdm-clean/src/session-child.c lightdm-workdir/src
  
  #if HAVE_LIBAUDIT
  static void
-diff -urN --no-dereference lightdm-clean/src/vt.c lightdm-workdir/src/vt.c
---- lightdm-clean/src/vt.c	2019-08-05 00:29:55.000000000 +0200
-+++ lightdm-workdir/src/vt.c	2026-06-06 00:20:40.613163324 +0200
+diff --git lightdm-clean/src/vt.c lightdm-workdir/src/vt.c
+index 920ae68..aa53779 100644
+--- lightdm-clean/src/vt.c
++++ lightdm-workdir/src/vt.c
 @@ -16,8 +16,13 @@
  #include <sys/stat.h>
  #include <fcntl.h>
@@ -86,7 +90,7 @@ diff -urN --no-dereference lightdm-clean/src/vt.c lightdm-workdir/src/vt.c
  #endif
  
  #include "vt.h"
-@@ -47,7 +52,7 @@
+@@ -47,7 +52,7 @@ vt_can_multi_seat (void)
  gint
  vt_get_active (void)
  {
@@ -95,7 +99,7 @@ diff -urN --no-dereference lightdm-clean/src/vt.c lightdm-workdir/src/vt.c
      /* Pretend always active */
      if (getuid () != 0)
          return 1;
-@@ -73,7 +78,7 @@
+@@ -73,7 +78,7 @@ vt_get_active (void)
  void
  vt_set_active (gint number)
  {
@@ -104,15 +108,3 @@ diff -urN --no-dereference lightdm-clean/src/vt.c lightdm-workdir/src/vt.c
      g_debug ("Activating VT %d", number);
  
      /* Pretend always active */
-diff -urN --no-dereference lightdm-clean/src/x-server-local.c lightdm-workdir/src/x-server-local.c
---- lightdm-clean/src/x-server-local.c	2020-08-07 06:52:25.000000000 +0200
-+++ lightdm-workdir/src/x-server-local.c	2026-06-06 00:20:40.608702910 +0200
-@@ -504,7 +504,7 @@
-         g_string_append (command, " -nolisten tcp");
- 
-     if (priv->vt >= 0)
--        g_string_append_printf (command, " vt%d -novtswitch", priv->vt);
-+        g_string_append_printf (command, " tty%d -novtswitch", priv->vt);
- 
-     if (priv->background)
-         g_string_append_printf (command, " -background %s", priv->background);
